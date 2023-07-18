@@ -1,0 +1,110 @@
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #FAFAFA;
+}
+
+   
+   .box {
+      display: flex; /* Added to create a flex container */
+      align-items: center; /* Added to vertically align the items */
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    
+      margin-bottom: 10px;
+      padding-left: 2px;
+      
+    }
+
+
+
+    .columns {
+      display: flex;
+    }
+
+    .column {
+      flex-basis: 50%;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      
+    }
+
+    .row-box {
+      flex-basis: 50%;
+      flex-grow: 1;
+      display: table-row;
+      height: auto;
+      padding: 10px;
+      font-size: large;
+      font-weight: bolder;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      
+    }
+    
+
+    button {
+      padding: 5px 10px;
+      font-size: medium;
+      font-weight: bold;
+      background-color: #E3F2FD;
+      color: #0D47A1;
+      border-radius: 5px;
+      height: 30px;
+      border: none;
+    }
+    
+    /* Dark Mode Styles */
+
+
+body.dark-mode {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+/* Update styles for specific elements in dark mode */
+body.dark-mode h1 {
+  color: #ffffff;
+}
+
+body.dark-mode .box {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+}
+
+body.dark-mode button {
+  padding: 5px 10px;
+  font-size: medium;
+  font-weight: bold;
+  background-color: rgba(21, 101, 192, 0.5);
+  color: #82B1FF;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Styles for input field */
+body.dark-mode input {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.dark-mode .MuiDrawer-paper {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-mode .MuiListItemIcon-root,
+.dark-mode .MuiListItemText-primary,
+.dark-mode .MuiSnackbarContent-action .MuiSvgIcon-root {
+  color: #fff;
+}
+
+.dark-mode .MuiListItemText-secondary {
+  color: #bdbdbd;
+}
+
