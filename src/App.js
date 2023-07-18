@@ -380,7 +380,15 @@ const App = () => {
     setIsModeOpen(!isModeOpen);
   };
   
-
+  useEffect(() => {
+    // Check the system preference and apply the corresponding mode
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDarkMode) {
+      handleDarkMode();
+    } else {
+      handleLightMode();
+    }
+  }, []);
 
   return (
     <div>
