@@ -401,14 +401,11 @@ const App = () => {
 
     if (prefersDarkMode) {
       // Enable light mode
-      document.body.classList.remove('dark-mode');
-      setCurrentMode('light');
-      localStorage.setItem('mode', 'light');
+      handleLightMode();
+      
     } else {
       // Enable dark mode
-      document.body.classList.add('dark-mode');
-      setCurrentMode('dark');
-      localStorage.setItem('mode', 'dark');
+      handleDarkMode();
     }
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
