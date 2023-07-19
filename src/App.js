@@ -337,24 +337,24 @@ const App = () => {
     }
   };
 
-  
   const handleModeClick = () => {
     setIsModeOpen(!isModeOpen);
   };
   
- 
 
   const handleDarkMode = () => {
     // Enable dark mode
     document.body.classList.add('dark-mode');
+
 
     setIsPanelOpen(false);
     setIsModeOpen(false);
 
     setCurrentMode('dark');
     localStorage.setItem('mode', 'dark');
-  };
 
+  };
+  
   const handleLightMode = () => {
     // Enable light mode
     document.body.classList.remove('dark-mode');
@@ -364,6 +364,8 @@ const App = () => {
 
     setCurrentMode('light');
     localStorage.setItem('mode', 'light');
+
+
   };
 
   useEffect(() => {
@@ -377,24 +379,23 @@ const App = () => {
       }
     }
   }, []);
-
-  useEffect(() => {
-    // Check if the system prefers dark mode initially
+  
+  const handleSystemModeClick = () => {
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDarkMode) {
-      // Enable dark mode
-      document.body.classList.add('dark-mode');
-      setCurrentMode('dark');
-      localStorage.setItem('mode', 'dark');
-    } else {
       // Enable light mode
       document.body.classList.remove('dark-mode');
       setCurrentMode('light');
       localStorage.setItem('mode', 'light');
+    } else {
+      // Enable dark mode
+      document.body.classList.add('dark-mode');
+      setCurrentMode('dark');
+      localStorage.setItem('mode', 'dark');
     }
 
-    // Listen for changes in the system mode
+    // Dynamic detection of system mode changes
     const systemModeChangeHandler = (event) => {
       if (event.matches) {
         // Enable dark mode
@@ -416,28 +417,7 @@ const App = () => {
     return () => {
       mediaQuery.removeEventListener('change', systemModeChangeHandler);
     };
-  }, []);
-
-  const handleSystemModeClick = () => {
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (prefersDarkMode) {
-      // Enable light mode
-      document.body.classList.remove('dark-mode');
-      setCurrentMode('light');
-      localStorage.setItem('mode', 'light');
-    } else {
-      // Enable dark mode
-      document.body.classList.add('dark-mode');
-      setCurrentMode('dark');
-      localStorage.setItem('mode', 'dark');
-    }
   };
-
-
-
-
-
 
 
   
