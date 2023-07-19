@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
+  Switch 
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -24,7 +25,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import LightModeIcon from '@mui/icons-material/Brightness6';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SystemModeIcon from '@mui/icons-material/Brightness6';
 
@@ -50,6 +51,7 @@ const App = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isModeOpen, setIsModeOpen] = useState(false);
   const [currentMode, setCurrentMode] = useState('light');
+  const [isSystemMode, setIsSystemMode] = useState(false);
 
 
 
@@ -380,35 +382,37 @@ const App = () => {
     }
   }, []);
   
-  const handleSystemModeClick = () => {
-    
-    // Dynamic detection of system mode changes
-    const systemModeChangeHandler = (event) => {
-      if (event.matches) {
-        // Enable dark mode
-        document.body.classList.add('dark-mode');
-        setCurrentMode('dark');
-        localStorage.setItem('mode', 'dark');
-      } else {
-        // Enable light mode
-        document.body.classList.remove('dark-mode');
-        setCurrentMode('light');
-        localStorage.setItem('mode', 'light');
-      }
-    };
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', systemModeChangeHandler);
-
-    // Clean up the event listener
-    return () => {
-      mediaQuery.removeEventListener('change', systemModeChangeHandler);
-    };
-
   
+
+  const handleSystemModeClick = () => {
+    // Enable or disable system mode
+    setIsSystemMode(!isSystemMode);
+  
+    // If system mode is enabled, disable dark mode
+    if (isSystemMode) {
+      const systemModeChangeHandler = (event) => {
+        if (event.matches) {
+          // Enable dark mode
+          document.body.classList.add('dark-mode');
+          setCurrentMode('dark');
+          localStorage.setItem('mode', 'dark');
+        } else {
+          // Enable light mode
+          document.body.classList.remove('dark-mode');
+          setCurrentMode('light');
+          localStorage.setItem('mode', 'light');
+        }
+      };
+  
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', systemModeChangeHandler);
+  
+      return () => {
+        mediaQuery.removeEventListener('change', systemModeChangeHandler);
+      };
+    }
   };
-
-
+  
   
   return (
     <div>
@@ -475,33 +479,52 @@ const App = () => {
 
   {isModeOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 </ListItem>
-
 <Collapse in={isModeOpen} timeout="auto" unmountOnExit>
-<List component="div" disablePadding style={{ marginLeft: '5px' }}>
-            <ListItem>
-              <ListItemIcon>
-                <DarkModeIcon />
-              </ListItemIcon>
-              <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Dark Mode" />
-              <Switch
-                checked={currentMode === 'dark'}
-                onChange={currentMode === 'dark' ? handleLightMode : handleDarkMode}
-                color="primary"
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <SystemModeIcon />
-              </ListItemIcon>
-              <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="System Mode" />
-              <Switch
-                checked={currentMode === 'dark'}
-                onChange={handleSystemModeClick}
-                color="primary"
-              />
-            </ListItem>
-          </List>
+  <List component="div" disablePadding style={{ marginLeft: '5px' }}>
+
+    <ListItem>
+      <ListItemIcon>
+        <LightModeIcon />
+      </ListItemIcon>
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Light Mode" />
+      <Switch
+        checked={currentMode === 'light'}
+        onChange={handleLightMode}
+        color="primary"
+        disabled={isSystemMode || currentMode === 'light'}
+      />
+    </ListItem>
+
+    <ListItem>
+      <ListItemIcon>
+        <DarkModeIcon />
+      </ListItemIcon>
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Dark Mode" />
+      <Switch
+        checked={currentMode === 'dark'}
+        onChange={handleDarkMode}
+        color="primary"
+        disabled={isSystemMode || currentMode === 'dark'}
+      />
+    </ListItem>
+
+    <ListItem>
+      <ListItemIcon>
+        <SystemModeIcon />
+      </ListItemIcon>
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="System Mode" />
+      <Switch
+        checked={isSystemMode}
+        onChange={handleSystemModeClick}
+        color="primary"
+      />
+    </ListItem>
+  </List>
 </Collapse>
+
+
+
+
     </List>
   </Box>
 </Drawer>
