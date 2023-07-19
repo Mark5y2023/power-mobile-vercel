@@ -355,16 +355,6 @@ const App = () => {
 
   };
   
-  const handleLightMode = () => {
-    // Enable light mode
-    document.body.classList.remove('dark-mode');
-
-    setIsPanelOpen(false);
-    setIsModeOpen(false);
-
-    setCurrentMode('light');
-    localStorage.setItem('mode', 'light');
-
 
   };
 
@@ -386,10 +376,14 @@ const App = () => {
     const systemModeChangeHandler = (event) => {
       if (event.matches) {
         // Enable dark mode
-        handleDarkMode();
+        document.body.classList.add('dark-mode');
+        setCurrentMode('dark');
+        localStorage.setItem('mode', 'dark');
       } else {
         // Enable light mode
-        handleLightMode(); 
+        document.body.classList.remove('dark-mode');
+        setCurrentMode('light');
+        localStorage.setItem('mode', 'light');
       }
     };
 
@@ -835,6 +829,6 @@ const App = () => {
 
     </div>
   );
-};
+
 
 export default App;
