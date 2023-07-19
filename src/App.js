@@ -397,6 +397,20 @@ const App = () => {
       }
     };
 
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (prefersDarkMode) {
+      // Enable light mode
+      document.body.classList.remove('dark-mode');
+      setCurrentMode('light');
+      localStorage.setItem('mode', 'light');
+    } else {
+      // Enable dark mode
+      document.body.classList.add('dark-mode');
+      setCurrentMode('dark');
+      localStorage.setItem('mode', 'dark');
+    }
+
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', systemModeChangeHandler);
 
@@ -404,6 +418,8 @@ const App = () => {
     return () => {
       mediaQuery.removeEventListener('change', systemModeChangeHandler);
     };
+
+  
   };
 
 
