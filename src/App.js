@@ -386,14 +386,10 @@ const App = () => {
     const systemModeChangeHandler = (event) => {
       if (event.matches) {
         // Enable dark mode
-        document.body.classList.add('dark-mode');
-        setCurrentMode('dark');
-        localStorage.setItem('mode', 'dark');
+        handleDarkMode();
       } else {
         // Enable light mode
-        document.body.classList.remove('dark-mode');
-        setCurrentMode('light');
-        localStorage.setItem('mode', 'light');
+        handleLightMode(); 
       }
     };
 
@@ -492,19 +488,7 @@ const App = () => {
       }}
       primary="Dark Mode" />
     </ListItem>
-    <ListItem button onClick={handleLightMode}>
-      <ListItemIcon>
-        <LightModeIcon />
-      </ListItemIcon>
-      <ListItemText primaryTypographyProps={{
-      variant: 'body1',
-      fontSize: 'medium',
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '-15px',
-    }}
-    primary="Light Mode" />
-    </ListItem>
+   
     <ListItem button onClick={handleSystemModeClick}>
       <ListItemIcon>
         <SystemModeIcon />
