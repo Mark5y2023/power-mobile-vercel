@@ -401,11 +401,11 @@ const App = () => {
 
     if (prefersDarkMode) {
       // Enable light mode
-      handleLightMode();
+      handleDarkMode();
       
     } else {
       // Enable dark mode
-      handleDarkMode();
+      handleLightMode();
     }
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
