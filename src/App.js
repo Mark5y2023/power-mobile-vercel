@@ -296,7 +296,6 @@ const App = () => {
   const handleHideHistory = () => {
     setShowHistory(false);
   };
-
   const handleDelete = (index) => {
     const updatedCalculations = [...calculations];
     const confirmDeleteMessage =
@@ -311,22 +310,19 @@ const App = () => {
       setCalculations(updatedCalculations);
   
       if (updatedCalculations.length === 0) {
-        
-      localStorage.clear();
-      setCurrentPage(1);
-      setName('');
-      setEmail('');
-      setPhoto(null);
-      setFirstReading('');
-      setRate('');
-      setNewReading('');
-      setPreviousReading('');
-      setCalculations([]);
-      setDifference('');
-      localStorage.removeItem('difference');
-      window.location.reload();
-
-      
+        localStorage.clear();
+        setCurrentPage(1);
+        setName('');
+        setEmail('');
+        setPhoto(null);
+        setFirstReading('');
+        setRate('');
+        setNewReading('');
+        setPreviousReading('');
+        setCalculations([]);
+        setDifference('');
+        localStorage.removeItem('difference');
+        window.location.reload();
       } else {
         const latestCalculation = updatedCalculations[updatedCalculations.length - 1];
         setPreviousReading(latestCalculation.newReading);
@@ -335,11 +331,20 @@ const App = () => {
         setStoredAddedCost(latestCalculation.addedCost);
         localStorage.setItem('addedCost', latestCalculation.addedCost);
         localStorage.setItem('difference', latestCalculation.difference);
+  
+        // Check if the second-to-last entry is deleted
+        if (updatedCalculations.length === 1) {
+          const singleCalculation = updatedCalculations[0];
+          singleCalculation.addedCost = '0';
+          localStorage.setItem('calculations', JSON.stringify([singleCalculation]));
+        }
+  
         const currentDateLog = new Date().toLocaleString();
         localStorage.setItem('dateLog', currentDateLog);
       }
     }
   };
+  
 
   const handleModeClick = () => {
     setIsModeOpen(!isModeOpen);
@@ -420,6 +425,7 @@ const App = () => {
   }, [isSystemMode]);
   
   
+
 
   return (
     <div>
