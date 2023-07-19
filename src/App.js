@@ -381,28 +381,39 @@ const App = () => {
       }
     }
   }, []);
-  
-  // Define the systemModeChangeHandler function outside of handleSystemModeClick
-const systemModeChangeHandler = (event) => {
+  const systemModeChangeHandler = (event) => {
   if (event.matches) {
     // Enable dark mode
     document.body.classList.add('dark-mode');
     setCurrentMode('dark');
+    setIsSystemMode(true);
     localStorage.setItem('mode', 'dark');
+    localStorage.setItem('isSystemMode', 'true');
   } else {
     // Enable light mode
     document.body.classList.remove('dark-mode');
     setCurrentMode('light');
+    setIsSystemMode(false);
     localStorage.setItem('mode', 'light');
+    localStorage.setItem('isSystemMode', 'false');
   }
 };
 
 const handleSystemModeClick = () => {
   // Enable or disable system mode
   setIsSystemMode(!isSystemMode);
+  localStorage.setItem('isSystemMode', (!isSystemMode).toString());
+};
 
-  // If system mode is enabled, add the event listener
-  if (!isSystemMode) {
+useEffect(() => {
+  const storedSystemMode = localStorage.getItem('isSystemMode');
+  if (storedSystemMode) {
+    setIsSystemMode(storedSystemMode === 'true');
+  }
+}, []);
+
+useEffect(() => {
+  if (isSystemMode) {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', systemModeChangeHandler);
 
@@ -410,13 +421,13 @@ const handleSystemModeClick = () => {
       mediaQuery.removeEventListener('change', systemModeChangeHandler);
     };
   } else {
-    // Disable system mode, remove the event listener
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.removeEventListener('change', systemModeChangeHandler);
   }
-};
+  localStorage.setItem('isSystemMode', isSystemMode.toString());
+}, [isSystemMode]);
 
-  
+
   return (
     <div>
 
