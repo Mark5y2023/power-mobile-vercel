@@ -397,17 +397,6 @@ const App = () => {
       }
     };
 
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (prefersDarkMode) {
-      // Enable light mode
-      handleDarkMode();
-      
-    } else {
-      // Enable dark mode
-      handleLightMode();
-    }
-
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', systemModeChangeHandler);
 
