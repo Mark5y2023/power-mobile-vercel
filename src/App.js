@@ -383,7 +383,7 @@ const App = () => {
  
   const handleSystemModeClick = () => {
     // Check if the system prefers dark mode
-    const prefersLightMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
   
     if (prefersLightMode) {
       // Enable dark mode
