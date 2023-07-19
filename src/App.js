@@ -383,22 +383,24 @@ const App = () => {
  
   const handleSystemModeClick = () => {
     // Check if the system prefers dark mode
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersLightMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
   
-    if (prefersDarkMode) {
+    if (prefersLightMode) {
       // Enable dark mode
-      document.body.classList.add('dark-mode');
-      setCurrentMode('dark');
-      localStorage.setItem('mode', 'dark');
-    } else {
-      // Disable dark mode
+
       document.body.classList.remove('dark-mode');
       setCurrentMode('light');
       localStorage.setItem('mode', 'light');
+
+      
+    } else {
+      // Disable dark mode
+      document.body.classList.add('dark-mode');
+      setCurrentMode('dark');
+      localStorage.setItem('mode', 'dark');
+
     }
   
-    // Refresh the page
-    window.location.reload();
   };
   
   return (
