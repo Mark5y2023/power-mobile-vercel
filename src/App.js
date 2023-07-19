@@ -381,6 +381,7 @@ const App = () => {
       }
     }
   }, []);
+
   const systemModeChangeHandler = (event) => {
   if (event.matches) {
     // Enable dark mode
@@ -395,7 +396,7 @@ const App = () => {
     setCurrentMode('light');
     setIsSystemMode(false);
     localStorage.setItem('mode', 'light');
-    localStorage.setItem('isSystemMode', 'false');
+    localStorage.setItem('isSystemMode', 'true');
   }
 };
 
