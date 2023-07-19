@@ -390,6 +390,12 @@ const App = () => {
     }
   }, []);
 
+
+  const handleSystemModeClick = () => {
+    // Refresh the page
+    window.location.reload();
+  };
+
   return (
     <div>
 
@@ -485,7 +491,7 @@ const App = () => {
     }}
     primary="Light Mode" />
     </ListItem>
-    <ListItem button onClick={handleLightMode}>
+    <ListItem button onClick={handleSystemModeClick}>
       <ListItemIcon>
         <SystemModeIcon />
       </ListItemIcon>
