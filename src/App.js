@@ -355,6 +355,16 @@ const App = () => {
 
   };
   
+  const handleLightMode = () => {
+    // Enable light mode
+    document.body.classList.remove('dark-mode');
+
+    setIsPanelOpen(false);
+    setIsModeOpen(false);
+
+    setCurrentMode('light');
+    localStorage.setItem('mode', 'light');
+
 
   };
 
@@ -468,35 +478,29 @@ const App = () => {
 
 <Collapse in={isModeOpen} timeout="auto" unmountOnExit>
 <List component="div" disablePadding style={{ marginLeft: '20px' }}>
-    <ListItem button onClick={handleDarkMode}>
-      <ListItemIcon>
-        <DarkModeIcon />
-      </ListItemIcon>
-      
-      <ListItemText primaryTypographyProps={{
-        variant: 'body1',
-        fontSize: 'medium',
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: '-15px',
-      }}
-      primary="Dark Mode" />
-    </ListItem>
-   
-    <ListItem button onClick={handleSystemModeClick}>
-      <ListItemIcon>
-        <SystemModeIcon />
-      </ListItemIcon>
-      <ListItemText primaryTypographyProps={{
-      variant: 'body1',
-      fontSize: 'medium',
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '-15px',
-    }}
-    primary="System Mode" />
-    </ListItem>
-  </List>
+            <ListItem>
+              <ListItemIcon>
+                <DarkModeIcon />
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Dark Mode" />
+              <Switch
+                checked={currentMode === 'dark'}
+                onChange={currentMode === 'dark' ? handleLightMode : handleDarkMode}
+                color="primary"
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <SystemModeIcon />
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="System Mode" />
+              <Switch
+                checked={currentMode === 'dark'}
+                onChange={handleSystemModeClick}
+                color="primary"
+              />
+            </ListItem>
+          </List>
 </Collapse>
     </List>
   </Box>
@@ -829,6 +833,6 @@ const App = () => {
 
     </div>
   );
-
+};
 
 export default App;
