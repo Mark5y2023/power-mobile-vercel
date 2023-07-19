@@ -25,9 +25,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/Brightness6';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SystemModeIcon from '@mui/icons-material/Brightness6';
+import Divider from '@mui/material/Divider';
+
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -428,59 +430,62 @@ const App = () => {
 
 <Drawer anchor="right" open={isPanelOpen} onClose={() => setIsPanelOpen(false)}>
   <Box sx={{ width: 250 }} role="presentation">
-    <List>
+    <List sx={{ flexDirection: 'column' }}>
+      <ListItem sx={{ justifyContent: 'center', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+       <ListItemIcon sx={{ display: 'flex', justifyContent: 'center' }}>
+          <RocketLaunchIcon />
+        </ListItemIcon>
+        <ListItemText
+          primaryTypographyProps={{
+            variant: 'body1',
+            fontSize: 'medium',
+          }}
+          primary="Power Mobile"
+        />
+        <ListItemText
+          primaryTypographyProps={{
+            variant: 'body2',
+            fontSize: 'small',
+          }}
+          primary="version 2.1.0.2023"
+        />
+      </ListItem>
+      <Divider />
       <ListItem button onClick={handleDeveloperClick}>
         <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          
-          <ListItemText
-    primaryTypographyProps={{
-      variant: 'body1',
-      fontSize: 'large',
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '-15px',
-      
-    }}
-    primary="Developer"
-  />
-
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText
+          primaryTypographyProps={{
+            variant: 'body1',
+            fontSize: 'large',
+          }}
+          primary="Developer"
+        />
       </ListItem>
       <ListItem button onClick={handleReset}>
         <ListItemIcon>
           <DeleteForeverIcon />
         </ListItemIcon>
         <ListItemText
-    primaryTypographyProps={{
-      variant: 'body1',
-      fontSize: 'large',
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '-15px',
-     
-    }}
-    primary="Reset"
-  />
-  
-        
-           </ListItem>
+          primaryTypographyProps={{
+            variant: 'body1',
+            fontSize: 'large',
+          }}
+          primary="Reset"
+        />
+      </ListItem>
       <ListItem button onClick={handleModeClick}>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        
         <ListItemText
-    primaryTypographyProps={{
-      variant: 'body1',
-      fontSize: 'large',
-      display: 'flex',
-      alignItems: 'center',
-      marginLeft: '-15px',
-    }}
-    primary="Mode"
-  />
-  
+          primaryTypographyProps={{
+            variant: 'body1',
+            fontSize: 'large',
+          }}
+          primary="Mode"
+        />
 
   {isModeOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 </ListItem>
