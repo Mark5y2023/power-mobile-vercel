@@ -407,8 +407,7 @@ const App = () => {
       localStorage.setItem('mode', 'light');
     }
   
-    // Refresh the page
-    window.location.reload();
+
   };
   
   return (
