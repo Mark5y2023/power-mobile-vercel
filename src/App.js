@@ -382,37 +382,40 @@ const App = () => {
     }
   }, []);
   
-  
+  // Define the systemModeChangeHandler function outside of handleSystemModeClick
+const systemModeChangeHandler = (event) => {
+  if (event.matches) {
+    // Enable dark mode
+    document.body.classList.add('dark-mode');
+    setCurrentMode('dark');
+    localStorage.setItem('mode', 'dark');
+  } else {
+    // Enable light mode
+    document.body.classList.remove('dark-mode');
+    setCurrentMode('light');
+    localStorage.setItem('mode', 'light');
+  }
+};
 
-  const handleSystemModeClick = () => {
-    // Enable or disable system mode
-    setIsSystemMode(!isSystemMode);
-  
-    // If system mode is enabled, disable dark mode
-    if (isSystemMode) {
-      const systemModeChangeHandler = (event) => {
-        if (event.matches) {
-          // Enable dark mode
-          document.body.classList.add('dark-mode');
-          setCurrentMode('dark');
-          localStorage.setItem('mode', 'dark');
-        } else {
-          // Enable light mode
-          document.body.classList.remove('dark-mode');
-          setCurrentMode('light');
-          localStorage.setItem('mode', 'light');
-        }
-      };
-  
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      mediaQuery.addEventListener('change', systemModeChangeHandler);
-  
-      return () => {
-        mediaQuery.removeEventListener('change', systemModeChangeHandler);
-      };
-    }
-  };
-  
+const handleSystemModeClick = () => {
+  // Enable or disable system mode
+  setIsSystemMode(!isSystemMode);
+
+  // If system mode is enabled, add the event listener
+  if (!isSystemMode) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', systemModeChangeHandler);
+
+    return () => {
+      mediaQuery.removeEventListener('change', systemModeChangeHandler);
+    };
+  } else {
+    // Disable system mode, remove the event listener
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.removeEventListener('change', systemModeChangeHandler);
+  }
+};
+
   
   return (
     <div>
