@@ -477,7 +477,7 @@ const App = () => {
 </ListItem>
 
 <Collapse in={isModeOpen} timeout="auto" unmountOnExit>
-<List component="div" disablePadding style={{ marginLeft: '20px' }}>
+<List component="div" disablePadding style={{ marginLeft: '5px' }}>
             <ListItem>
               <ListItemIcon>
                 <DarkModeIcon />
