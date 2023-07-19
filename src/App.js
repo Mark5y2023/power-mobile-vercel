@@ -385,20 +385,11 @@ const App = () => {
   const handleSystemModeClick = () => {
     // Check if the system prefers dark mode
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
     if (prefersDarkMode) {
-      // Enable dark mode
-      document.body.classList.add('dark-mode');
-      setCurrentMode('dark');
-      localStorage.setItem('mode', 'dark');
+      handleDarkMode();
     } else {
-      // Disable dark mode
-      document.body.classList.remove('dark-mode');
-      setCurrentMode('light');
-      localStorage.setItem('mode', 'light');
+      handleLightMode();
     }
-  
-
   };
   
   return (
