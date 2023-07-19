@@ -51,7 +51,7 @@ const App = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isModeOpen, setIsModeOpen] = useState(false);
   const [currentMode, setCurrentMode] = useState('light');
-  const [isSystemMode, setIsSystemMode] = useState(true);
+  const [isSystemMode, setIsSystemMode] = useState(false);
 
 
 
