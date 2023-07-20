@@ -17,7 +17,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { green } from '@mui/material/colors';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from '@mui/icons-material/Sell';
 import '@fontsource/roboto';
 import './style.css';
 import PersonIcon from '@mui/icons-material/Person';
@@ -26,7 +26,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import RocketLaunchIcon from '@mui/icons-material/TrackChanges';
 import SystemModeIcon from '@mui/icons-material/Brightness6';
 import Divider from '@mui/material/Divider';
 import { useSpring, animated } from 'react-spring';
@@ -576,7 +576,8 @@ const App = () => {
 
 
 {currentPage === 1 && (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', margin: '30px', marginTop: '-10vh' }}>
+
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', margin: '30px', marginTop: '-10vh'}}>
     
     <RocketLaunchIcon style={{ fontSize: '50px', color: '#6200EA', marginBottom:'10vh' }} /> {/* Added RocketLaunchIcon */}
     
@@ -627,7 +628,7 @@ const App = () => {
       placeholder="Name"
       value={name}
       onChange={(e) => handleFieldChange(e, setName)}
-      style={{ width: '100%', height: '50px', paddingLeft: '20px', fontSize: 'medium' }}
+      style={{ width: '100%', height: '50px',  paddingLeft: '10px' , fontSize: 'medium' }}
     />
     <br />
     <input
@@ -636,13 +637,13 @@ const App = () => {
       placeholder="Email"
       value={email}
       onChange={(e) => handleFieldChange(e, setEmail)}
-      style={{ width: '100%', height: '50px', paddingLeft: '20px', fontSize: 'medium' }}
+      style={{ width: '100%', height: '50px', paddingLeft: '10px', fontSize: 'medium' }}
     />
 
     </div>
+  <br/>
+  <button onClick={handlePage1Next} style={{ height: '50px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)' }}>Next</button>
 
-    <br />
-    <button onClick={handlePage1Next} style={{ width: '100%', height: '50px'}}>Next</button>
   </div>
 )}
 
@@ -676,7 +677,7 @@ const App = () => {
       value={firstReading}
       onChange={(e) => handleFieldChange(e, setFirstReading)}
       placeholder="First Reading"
-      style={{ width: '100%', height: '50px', paddingLeft: '20px', fontSize: 'medium' }}
+      style={{ width: '100%', height: '50px', paddingLeft: '10px', fontSize: 'medium' }}
     />
     <br />
     <input
@@ -685,13 +686,13 @@ const App = () => {
         value={rate}
         onChange={(e) => handleFieldChange(e, setRate)}
         placeholder="Rate"
-      style={{ width: '100%', height: '50px', paddingLeft: '20px', fontSize: 'medium' }}
+      style={{ width: '100%', height: '50px', paddingLeft: '10px', fontSize: 'medium' }}
     />
 
     </div>
 
     <br />
-    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px'}}>Next</button>
+    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)'}}>Next</button>
   </div>
 )}
 
@@ -923,7 +924,7 @@ const App = () => {
         >
 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(46, 125, 50, 0.8)' , borderRadius:'5px' , padding:'15px' }}>
       <CheckCircleIcon style={{ fontSize: '50px', color: 'white' }} />
-      <span style={{ color: 'white', marginTop: '10px' }}>New Entry added successfully!</span>
+      <span style={{ color: 'white', marginTop: '10px' }}>New Entry added!</span>
     </div>
     </animated.div>
   </Snackbar>
