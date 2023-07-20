@@ -1,6 +1,6 @@
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #FAFAFA;
+  background-color: #F5F5F5;
 }
 
    
@@ -40,6 +40,7 @@ body {
       font-size: large;
       font-weight: bolder;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: #FFFFFF;
       
     }
     
@@ -107,4 +108,19 @@ body.dark-mode input {
 .dark-mode .MuiListItemText-secondary {
   color: #bdbdbd;
 }
+/* Add this CSS to your stylesheets */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
 
+.shake-snackbar {
+  animation: shake 0.8s;
+}

@@ -29,6 +29,8 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SystemModeIcon from '@mui/icons-material/Brightness6';
 import Divider from '@mui/material/Divider';
+import { useSpring, animated } from 'react-spring';
+
 
 
 const App = () => {
@@ -54,7 +56,7 @@ const App = () => {
   const [isModeOpen, setIsModeOpen] = useState(false);
   const [currentMode, setCurrentMode] = useState('light');
   const [isSystemMode, setIsSystemMode] = useState(false);
-
+  const [isErrorShown, setIsErrorShown] = useState(false);
 
 
   useEffect(() => {
@@ -174,7 +176,7 @@ const App = () => {
 
   const handleSecondPageNext = () => {
     if (firstReading.trim() === '' || rate.trim() === '') {
-      setErrorMessage('Please make sure all fields are filled out.');
+      setErrorMessage('Please make sure to complete all fields.');
       setShowErrorMessage(true);
       return;
 
@@ -194,7 +196,7 @@ const App = () => {
   
   const handleAddReading = () => {
     if (newReading.trim() === '') {
-      setErrorMessage('Field is empty. Kindly check and try again.');
+      setErrorMessage('Field is empty. Please check and try again.');
       setShowErrorMessage(true);
       return;
     }
@@ -259,7 +261,24 @@ const App = () => {
   
   const handleSnackbarClose = () => {
     setShowErrorMessage(false);
+    setShowEmailError(false);
+    setIsErrorShown(false);
   };
+
+  const shakeProps = useSpring({
+    to: async (next) => {
+      while (showErrorMessage) {
+        await next({ transform: 'translateX(-5px)' });
+        await next({ transform: 'translateX(5px)' });
+        await next({ transform: 'translateX(-5px)' });
+        await next({ transform: 'translateX(5px)' });
+        await next({ transform: 'translateX(0)' });
+      }
+    },
+    from: { transform: 'translateX(0)' },
+    config: { tension: 300, friction: 10 },
+    reset: true,
+  });
 
   const handleFieldChange = (e, setter) => {
     setter(e.target.value);
@@ -267,22 +286,25 @@ const App = () => {
 
   const handlePage1Next = () => {
     if (name.trim() === '' || email.trim() === '') {
-      setErrorMessage('Please make sure all fields are filled out.');
+      setErrorMessage('Please make sure to complete all fields.');
       setShowErrorMessage(true);
+      setIsErrorShown(true);
       return;
     }
 
     const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailFormat.test(email)) {
    
-      setShowErrorMessage(true);
-      setShowEmailError(true); // Show the email format error snackbar
+      setShowEmailError(true);
+      setIsErrorShown(true);
       return;
     }
 
     if (!localStorage.getItem('photo')) {
       setErrorMessage('Please upload a photo.');
+      setShowEmailError(false);
       setShowErrorMessage(true);
+      setIsErrorShown(true);
       return;
     }
 
@@ -457,18 +479,22 @@ const App = () => {
         />
       </ListItem>
       <Divider />
+    
       <ListItem button onClick={handleDeveloperClick}>
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <ListItemText
-          primaryTypographyProps={{
-            variant: 'body1',
-            fontSize: 'large',
-          }}
-          primary="Developer"
-        />
-      </ListItem>
+  <ListItemIcon>
+    <PersonIcon />
+  </ListItemIcon>
+  <ListItemText
+    primaryTypographyProps={{
+      variant: 'body1',
+      fontSize: 'large',
+      style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
+    }}
+    primary="Developer"
+  />
+</ListItem>
+
+
       <ListItem button onClick={handleReset}>
         <ListItemIcon>
           <DeleteForeverIcon />
@@ -477,6 +503,7 @@ const App = () => {
           primaryTypographyProps={{
             variant: 'body1',
             fontSize: 'large',
+            style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
           }}
           primary="Reset"
         />
@@ -489,6 +516,7 @@ const App = () => {
           primaryTypographyProps={{
             variant: 'body1',
             fontSize: 'large',
+            style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
           }}
           primary="Mode"
         />
@@ -496,13 +524,13 @@ const App = () => {
   {isModeOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 </ListItem>
 <Collapse in={isModeOpen} timeout="auto" unmountOnExit>
-  <List component="div" disablePadding style={{ marginLeft: '5px' }}>
+  <List component="div" disablePadding style={{ marginLeft: '15px' }}>
 
     <ListItem>
       <ListItemIcon>
-        <LightModeIcon />
+        <LightModeIcon style={{fontSize: '20px'}}/>
       </ListItemIcon>
-      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Light Mode" />
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium',  style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' } }} primary="Light Mode" />
       <Switch
         checked={currentMode === 'light'}
         onChange={handleLightMode}
@@ -513,9 +541,9 @@ const App = () => {
 
     <ListItem>
       <ListItemIcon>
-        <DarkModeIcon />
+        <DarkModeIcon style={{fontSize: '20px'}} />
       </ListItemIcon>
-      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="Dark Mode" />
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' ,  style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }}} primary="Dark Mode" />
       <Switch
         checked={currentMode === 'dark'}
         onChange={handleDarkMode}
@@ -526,9 +554,9 @@ const App = () => {
 
     <ListItem>
       <ListItemIcon>
-        <SystemModeIcon />
+        <SystemModeIcon style={{fontSize: '20px'}} />
       </ListItemIcon>
-      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' }} primary="System Mode" />
+      <ListItemText primaryTypographyProps={{ variant: 'body1', fontSize: 'medium' ,  style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' } }} primary="System Mode" />
       <Switch
         checked={isSystemMode}
         onChange={handleSystemModeClick}
@@ -811,44 +839,67 @@ const App = () => {
         </div>
       )}
 
+
+
 {showErrorMessage && (
   <Snackbar
     open={showErrorMessage}
     autoHideDuration={3000}
     onClose={handleSnackbarClose}
     message={errorMessage}
-    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-    action={
-      <div onClick={handleSnackbarClose}>
-        <CancelIcon style={{ color: 'white' }} />
-      </div>
-    }
-    ContentProps={{
-      style: { backgroundColor: '#B00020' },
-      'aria-describedby': 'message-id',
+    anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+    style={{
+      transform: 'translate(-50%, -50%)', // Center the snackbar both vertically and horizontally
+      top: '50%',
+      left: '50%',
     }}
-  />
+    ContentProps={{
+      className: 'shake-snackbar', // Add the shake-snackbar class here
+    }}
+  >
+     <animated.div
+          style={{
+            transform: 'translate(-50%, -50%)',
+            ...shakeProps,
+          }}
+          className="shake-snackbar"
+        >
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(176, 0, 32, 0.8)', borderRadius:'5px' , padding:'15px' }}>
+      <CancelIcon style={{ fontSize: '50px', color: 'white' }} />
+      <span style={{ color: 'white', marginTop: '10px' }}>{errorMessage}</span>
+    </div>
+    </animated.div>
+  </Snackbar>
 )}
 
-
-  
 {showEmailError && (
   <Snackbar
     open={showEmailError}
     autoHideDuration={3000}
     onClose={() => setShowEmailError(false)}
-    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-    action={
-      <div onClick={() => setShowEmailError(false)}>
-        <CancelIcon />
-      </div>
-    }
-    ContentProps={{
-      style: { backgroundColor: '#B00020' },
-      'aria-describedby': 'message-id',
+    anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+    style={{
+      transform: 'translate(-50%, -50%)', // Center the snackbar both vertically and horizontally
+      top: '50%',
+      left: '50%',
     }}
-    message={<span id="message-id">Invalid email format.</span>}
-  />
+    ContentProps={{
+      className: 'shake-snackbar', // Add the shake-snackbar class here
+    }}
+  >
+     <animated.div
+          style={{
+            transform: 'translate(-50%, -50%)',
+            ...shakeProps,
+          }}
+          className="shake-snackbar"
+        >
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(176, 0, 32, 0.8)', borderRadius:'5px', padding:'15px' }}>
+      <CancelIcon style={{ fontSize: '50px', color: 'white' }} />
+      <span style={{ color: 'white', marginTop: '10px' }}>Invalid email format.</span>
+    </div>
+    </animated.div>
+  </Snackbar>
 )}
 
 
@@ -856,19 +907,26 @@ const App = () => {
   open={showSnackbar}
   autoHideDuration={3000}
   onClose={() => setShowSnackbar(false)}
-  message="New entry added successfully!"
-  action={
-    <div onClick={() => setShowSnackbar(false)}>
-      <CheckCircleIcon fontSize="small" style={{ color: 'white' }} />
-    </div>
-  }
-  ContentProps={{
-    style: { backgroundColor: '#2E7D32' },
-    'aria-describedby': 'message-id',
+  anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+  style={{
+    transform: 'translate(-50%, -50%)', // Center the snackbar both vertically and horizontally
+    top: '50%',
+    left: '50%',
   }}
-  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-/>
-
+>
+<animated.div
+          style={{
+            transform: 'translate(-50%, -50%)',
+            ...shakeProps,
+          }}
+          className="shake-snackbar"
+        >
+<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(46, 125, 50, 0.8)' , borderRadius:'5px' , padding:'15px' }}>
+      <CheckCircleIcon style={{ fontSize: '50px', color: 'white' }} />
+      <span style={{ color: 'white', marginTop: '10px' }}>New Entry added successfully!</span>
+    </div>
+    </animated.div>
+  </Snackbar>
 
     </div>
   );
