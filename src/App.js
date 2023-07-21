@@ -171,41 +171,42 @@ const canvasRef = useRef(null);
     fileInputRef.current.click();
   };
 
-
-
- 
-const handleFileInputChange = (e) => {
-  const file = e.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const image = new Image();
-    image.onload = () => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-
-      // Calculate the dimensions for the cropped 1:1 image
-      const squareSize = Math.min(image.width, image.height);
-      const startX = (image.width - squareSize) / 2;
-      const startY = (image.height - squareSize) / 2;
-
-      // Set the canvas size to the square size
-      canvas.width = squareSize;
-      canvas.height = squareSize;
-
-      // Draw the cropped image on the canvas
-      ctx.drawImage(image, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
-
-      // Get the cropped image data URL
-      const croppedDataUrl = canvas.toDataURL();
-
-      // Compress and set the photo state
-      const compressedDataUrl = compressImage(croppedDataUrl);
-      setPhoto(compressedDataUrl);
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const image = new Image();
+      image.src = event.target.result;
+      image.onload = () => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+  
+        const maxSize = 200; // Set your desired maximum size here
+        let width = image.width;
+        let height = image.height;
+        let size = Math.min(width, height);
+  
+        // Calculate the cropping position based on the aspect ratio
+        const x = (width - size) / 2;
+        const y = (height - size) / 2;
+  
+        canvas.width = maxSize;
+        canvas.height = maxSize;
+  
+        context.clearRect(0, 0, maxSize, maxSize);
+        context.beginPath();
+        context.arc(maxSize / 2, maxSize / 2, maxSize / 2, 0, 2 * Math.PI);
+        context.closePath();
+        context.clip();
+        context.drawImage(image, x, y, size, size, 0, 0, maxSize, maxSize);
+  
+        const dataUrl = canvas.toDataURL();
+        setPhoto(dataUrl);
+      };
     };
-    image.src = event.target.result;
+    reader.readAsDataURL(file);
   };
-  reader.readAsDataURL(file);
-};
+  
   
   
 
