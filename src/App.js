@@ -34,7 +34,6 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import HistoryIcon from '@mui/icons-material/History';
 
 
-
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [name, setName] = useState('');
@@ -171,39 +170,48 @@ const canvasRef = useRef(null);
   const handleAddPhoto = () => {
     fileInputRef.current.click();
   };
-
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
       const image = new Image();
+      image.src = event.target.result;
       image.onload = () => {
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
+        const context = canvas.getContext('2d');
   
-        // Calculate the dimensions for the cropped 1:1 image
-        const squareSize = Math.min(image.width, image.height);
-        const startX = (image.width - squareSize) / 2;
-        const startY = (image.height - squareSize) / 2;
+        const maxSize = 200; // Set your desired maximum size here
+        let width = image.width;
+        let height = image.height;
   
-        // Set the canvas size to the square size
-        canvas.width = squareSize;
-        canvas.height = squareSize;
+        if (width > height) {
+          if (width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+          }
+        }
   
-        // Draw the cropped image on the canvas
-        ctx.drawImage(image, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
+        const x = (maxSize - width) / 2;
+        const y = (maxSize - height) / 2;
   
-        // Get the cropped image data URL
-        const croppedDataUrl = canvas.toDataURL();
+        canvas.width = maxSize;
+        canvas.height = maxSize;
   
-        // Compress and set the photo state
-        const compressedDataUrl = compressImage(croppedDataUrl);
-        setPhoto(compressedDataUrl);
+        context.clearRect(0, 0, maxSize, maxSize);
+        context.drawImage(image, x, y, width, height);
+  
+        const dataUrl = canvas.toDataURL();
+        setPhoto(dataUrl);
       };
-      image.src = event.target.result;
     };
     reader.readAsDataURL(file);
   };
+  
   
 
   const handleSecondPageNext = () => {
@@ -687,8 +695,6 @@ const canvasRef = useRef(null);
         style={{ width: '75px', height: '75px', position: 'relative' }}
       >
         
-    <canvas ref={canvasRef} style={{ display: 'none' }} />
-
         <AddPhotoAlternateIcon style={{ borderRadius: '50%', fontSize: '50px' }} />
         {photo && (
           <CheckCircleIcon
@@ -718,6 +724,8 @@ const canvasRef = useRef(null);
       onChange={handleFileInputChange}
     />
     <br />
+
+    <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* Add the canvas element */}
     
     <div style={{ width:'100%' ,display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
     <input
