@@ -712,7 +712,7 @@ const App = () => {
 
     </div>
   <br/>
-  <button onClick={handlePage1Next} style={{ height: '50px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>Next</button>
+  <button onClick={handlePage1Next} style={{ height: '50px', width: '100%' }}>Next</button>
 
   </div>
 )}
@@ -762,7 +762,7 @@ const App = () => {
     </div>
 
     <br />
-    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)'}}>Next</button>
+    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px'}}>Next</button>
   </div>
 )}
 
@@ -774,7 +774,7 @@ const App = () => {
         <div>
 
 <div style={{ display: 'flex', justifyContent: 'flex-end',marginTop:'10px' }}>
-  <button onClick={handleSettingsButtonClick} style={{ display: 'flex', alignItems: 'center' , boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>
+  <button onClick={handleSettingsButtonClick} style={{ display: 'flex', alignItems: 'center' }}>
     <SettingsIcon style={{ marginRight: '5px' }} />Settings
   </button>
 </div>
@@ -803,7 +803,7 @@ const App = () => {
   <span style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: 'large', marginBottom:'5px' }}>
   Total Bill: ₱ {calculations.reduce((total, calc) => total + (calc.difference * rate), 0).toFixed(2)}
   <SellIcon style={{ marginLeft: '5px' , color: 'gray' , fontSize:'medium  '}} />
-  <button onClick={handleSave} style={{ marginLeft: '10px', border: 'none', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>
+  <button onClick={handleSave} style={{ marginLeft: '10px', border: 'none', cursor: 'pointer' }}>
   Save
 </button>
 </span>
@@ -854,7 +854,7 @@ const App = () => {
   <button
     id="add-reading-button"
     onClick={handleAddReading}
-    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', marginRight:'10px' , boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}
+    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', marginRight:'10px' }}
   >
     <AddIcon /> Add
   </button>
@@ -865,7 +865,7 @@ const App = () => {
 <div style={{ borderTop: '1px solid gray', margin: '10px' , marginTop:'20px' , marginBottom:'20px' }}></div>
          
             <button id="show-history-button" 
-            style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)'}}
+          
             onClick={handleShowHistory}>Show History</button>
             <Drawer
   anchor="bottom"
