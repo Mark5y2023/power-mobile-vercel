@@ -713,7 +713,7 @@ const handleFileInputChange = (e) => {
       style={{ display: 'none' }}
       onChange={handleFileInputChange}
     />
-    {photo && <img src={photo} alt="Selected" />}
+ 
     <canvas ref={canvasRef} style={{ display: 'none' }} />
     <br />
     
