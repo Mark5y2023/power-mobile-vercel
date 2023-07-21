@@ -161,7 +161,8 @@ const App = () => {
   }, [rate]);
   
  
-  const fileInputRef = useRef(null);
+const fileInputRef = useRef(null);
+const canvasRef = useRef(null);
 
   const compressImage = (dataUrl) => {
     return dataUrl;
@@ -171,15 +172,38 @@ const App = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const compressedDataUrl = compressImage(event.target.result);
+const handleFileInputChange = (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+
+      // Calculate the dimensions for the cropped 1:1 image
+      const squareSize = Math.min(image.width, image.height);
+      const startX = (image.width - squareSize) / 2;
+      const startY = (image.height - squareSize) / 2;
+
+      // Set the canvas size to the square size
+      canvas.width = squareSize;
+      canvas.height = squareSize;
+
+      // Draw the cropped image on the canvas
+      ctx.drawImage(image, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
+
+      // Get the cropped image data URL
+      const croppedDataUrl = canvas.toDataURL();
+
+      // Compress and set the photo state
+      const compressedDataUrl = compressImage(croppedDataUrl);
       setPhoto(compressedDataUrl);
     };
-    reader.readAsDataURL(file);
+    image.src = event.target.result;
   };
+  reader.readAsDataURL(file);
+};
 
   const handleSecondPageNext = () => {
     if (firstReading.trim() === '' || rate.trim() === '') {
@@ -689,6 +713,8 @@ const App = () => {
       style={{ display: 'none' }}
       onChange={handleFileInputChange}
     />
+    {photo && <img src={photo} alt="Selected" />}
+    <canvas ref={canvasRef} style={{ display: 'none' }} />
     <br />
     
     <div style={{ width:'100%' ,display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
