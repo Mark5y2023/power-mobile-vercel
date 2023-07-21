@@ -1,6 +1,6 @@
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #F5F5F5;
+  background-color: #FAFAFA;
 }
 
    
@@ -53,7 +53,8 @@ body {
       color: #1d65b4;
       border-radius: 5px;
       height: 30px;
-      border: none;
+      border: #eeeff8;
+      
     }
     
     /* Dark Mode Styles */
