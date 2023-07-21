@@ -161,7 +161,7 @@ const App = () => {
   }, [rate]);
   
  
-const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 const canvasRef = useRef(null);
 
   const compressImage = (dataUrl) => {
@@ -172,38 +172,39 @@ const canvasRef = useRef(null);
     fileInputRef.current.click();
   };
 
-const handleFileInputChange = (e) => {
-  const file = e.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const image = new Image();
-    image.onload = () => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-
-      // Calculate the dimensions for the cropped 1:1 image
-      const squareSize = Math.min(image.width, image.height);
-      const startX = (image.width - squareSize) / 2;
-      const startY = (image.height - squareSize) / 2;
-
-      // Set the canvas size to the square size
-      canvas.width = squareSize;
-      canvas.height = squareSize;
-
-      // Draw the cropped image on the canvas
-      ctx.drawImage(image, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
-
-      // Get the cropped image data URL
-      const croppedDataUrl = canvas.toDataURL();
-
-      // Compress and set the photo state
-      const compressedDataUrl = compressImage(croppedDataUrl);
-      setPhoto(compressedDataUrl);
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const image = new Image();
+      image.onload = () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+  
+        // Calculate the dimensions for the cropped 1:1 image
+        const squareSize = Math.min(image.width, image.height);
+        const startX = (image.width - squareSize) / 2;
+        const startY = (image.height - squareSize) / 2;
+  
+        // Set the canvas size to the square size
+        canvas.width = squareSize;
+        canvas.height = squareSize;
+  
+        // Draw the cropped image on the canvas
+        ctx.drawImage(image, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
+  
+        // Get the cropped image data URL
+        const croppedDataUrl = canvas.toDataURL();
+  
+        // Compress and set the photo state
+        const compressedDataUrl = compressImage(croppedDataUrl);
+        setPhoto(compressedDataUrl);
+      };
+      image.src = event.target.result;
     };
-    image.src = event.target.result;
+    reader.readAsDataURL(file);
   };
-  reader.readAsDataURL(file);
-};
+  
 
   const handleSecondPageNext = () => {
     if (firstReading.trim() === '' || rate.trim() === '') {
@@ -685,6 +686,9 @@ const handleFileInputChange = (e) => {
         onClick={handleAddPhoto}
         style={{ width: '75px', height: '75px', position: 'relative' }}
       >
+        
+    <canvas ref={canvasRef} style={{ display: 'none' }} />
+
         <AddPhotoAlternateIcon style={{ borderRadius: '50%', fontSize: '50px' }} />
         {photo && (
           <CheckCircleIcon
@@ -713,7 +717,6 @@ const handleFileInputChange = (e) => {
       style={{ display: 'none' }}
       onChange={handleFileInputChange}
     />
-    <canvas ref={canvasRef} style={{ display: 'none' }} />
     <br />
     
     <div style={{ width:'100%' ,display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -890,7 +893,7 @@ const handleFileInputChange = (e) => {
 <div style={{ borderTop: '1px solid gray', margin: '10px' , marginTop:'20px' , marginBottom:'20px' }}></div>
          
             <button id="show-history-button" 
-          
+           
             onClick={handleShowHistory}>Show History</button>
             <Drawer
   anchor="bottom"
