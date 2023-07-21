@@ -17,7 +17,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { green } from '@mui/material/colors';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
-import InfoIcon from '@mui/icons-material/Sell';
+import SellIcon from '@mui/icons-material/Sell';
 import '@fontsource/roboto';
 import './style.css';
 import PersonIcon from '@mui/icons-material/Person';
@@ -30,6 +30,8 @@ import RocketLaunchIcon from '@mui/icons-material/TrackChanges';
 import SystemModeIcon from '@mui/icons-material/Brightness6';
 import Divider from '@mui/material/Divider';
 import { useSpring, animated } from 'react-spring';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import HistoryIcon from '@mui/icons-material/History';
 
 
 
@@ -57,6 +59,8 @@ const App = () => {
   const [currentMode, setCurrentMode] = useState('light');
   const [isSystemMode, setIsSystemMode] = useState(false);
   const [isErrorShown, setIsErrorShown] = useState(false);
+  const [showMonthlyData, setShowMonthlyData] = useState(false);
+  const [savedData, setSavedData] = useState([]);
 
 
   useEffect(() => {
@@ -69,6 +73,7 @@ const App = () => {
     const storedNewReading = localStorage.getItem('newReading');
     const storedPreviousReading = localStorage.getItem('previousReading');
     const storedCalculations = JSON.parse(localStorage.getItem('calculations'));
+    const storedSavedData = JSON.parse(localStorage.getItem('savedData'));
     
 
     if (storedPage) setCurrentPage(parseInt(storedPage, 10));
@@ -80,6 +85,7 @@ const App = () => {
     if (storedNewReading) setNewReading(storedNewReading);
     if (storedPreviousReading) setPreviousReading(storedPreviousReading);
     if (storedCalculations) setCalculations(storedCalculations);
+    if (storedSavedData) setSavedData(storedSavedData);
   
   }, []);
 
@@ -96,8 +102,9 @@ const App = () => {
     localStorage.setItem('rate', rate);
     localStorage.setItem('newReading', newReading);
     localStorage.setItem('previousReading', previousReading);
+    localStorage.setItem('savedData', JSON.stringify(savedData));
     localStorage.setItem('calculations', JSON.stringify(calculations));
-  }, [currentPage, name, email, photo, firstReading, rate, newReading, previousReading, calculations]);
+  }, [currentPage, name, email, photo, firstReading, rate, newReading, previousReading, calculations,savedData]);
 
   useEffect(() => {
     const storedDifference = localStorage.getItem('difference');
@@ -244,6 +251,7 @@ const App = () => {
       setNewReading('');
       setPreviousReading('');
       setCalculations([]);
+      setSavedData([]);
       setDifference('');
       localStorage.removeItem('difference');
       window.location.reload();
@@ -251,8 +259,10 @@ const App = () => {
   };
 
   const handleSettingsButtonClick = () => {
-    setIsPanelOpen(!isPanelOpen);
+    setIsPanelOpen((prev) => !prev);
+    setIsModeOpen(false); // Close the mode settings panel when opening the main settings panel
   };
+  
 
   const handleDeveloperClick = () => {
     window.open('https://www.facebook.com/DenmarkJudilla.Main/', '_blank');
@@ -318,6 +328,22 @@ const App = () => {
   const handleHideHistory = () => {
     setShowHistory(false);
   };
+
+
+
+  const handleShowMonthlyData = () => {
+    setShowMonthlyData(true);
+    setIsPanelOpen(false);
+
+  };
+  
+  const handleHideMonthlyData = () => {
+    setShowMonthlyData(false);
+  };
+  
+
+
+
   const handleDelete = (index) => {
     const updatedCalculations = [...calculations];
     const confirmDeleteMessage =
@@ -446,8 +472,37 @@ const App = () => {
     }
   }, [isSystemMode]);
   
+  const handleSave = () => {
+    const currentDate = new Date();
+    const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+    const dateSaved = currentDate.toLocaleString();
+    const totalBill = calculations.reduce((total, calc) => total + calc.difference * rate, 0).toFixed(2);
   
-
+    const newSavedData = {
+      totalBill,
+      monthYear,
+      dateSaved,
+    };
+  
+  
+    // Check if there's already data for the current month
+    const existingDataForMonth = savedData.find((data) => data.monthYear === monthYear);
+  
+    // If there's existing data for the month, prompt a confirmation window
+    if (existingDataForMonth) {
+      const confirmOverwrite = window.confirm(`Data for ${monthYear} already exists. Do you want to overwrite it?`);
+      if (confirmOverwrite) {
+        // If confirmed, overwrite the existing data for the month
+        setSavedData((prevData) => prevData.map((data) => (data.monthYear === monthYear ? newSavedData : data)));
+        setShowSnackbar(true);
+      }
+    } else {
+      // If no existing data for the month, simply add the new entry
+      setSavedData((prevData) => [...prevData, newSavedData]);
+      setShowSnackbar(true);
+    }
+  };
+  
 
   return (
     <div>
@@ -475,10 +530,39 @@ const App = () => {
             variant: 'body2',
             fontSize: 'small',
           }}
-          primary="version 2.1.0.2023"
+          primary="version 2.1.2.2023"
         />
       </ListItem>
       <Divider />
+
+      <ListItem button onClick={handleShowMonthlyData}>
+      <ListItemIcon>
+    <EventNoteIcon  />
+  </ListItemIcon>
+  <ListItemText
+    primaryTypographyProps={{
+      variant: 'body1',
+      fontSize: 'large',
+      style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
+    }}
+    primary="Monthly"
+  />
+</ListItem>
+
+
+<ListItem button onClick={handleReset}>
+        <ListItemIcon>
+          <DeleteForeverIcon />
+        </ListItemIcon>
+        <ListItemText
+          primaryTypographyProps={{
+            variant: 'body1',
+            fontSize: 'large',
+            style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
+          }}
+          primary="Reset"
+        />
+      </ListItem>
     
       <ListItem button onClick={handleDeveloperClick}>
   <ListItemIcon>
@@ -494,20 +578,6 @@ const App = () => {
   />
 </ListItem>
 
-
-      <ListItem button onClick={handleReset}>
-        <ListItemIcon>
-          <DeleteForeverIcon />
-        </ListItemIcon>
-        <ListItemText
-          primaryTypographyProps={{
-            variant: 'body1',
-            fontSize: 'large',
-            style: { marginLeft: '-20px', display: 'flex', alignItems: 'center' }
-          }}
-          primary="Reset"
-        />
-      </ListItem>
       <ListItem button onClick={handleModeClick}>
         <ListItemIcon>
           <SettingsIcon />
@@ -642,7 +712,7 @@ const App = () => {
 
     </div>
   <br/>
-  <button onClick={handlePage1Next} style={{ height: '50px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)' }}>Next</button>
+  <button onClick={handlePage1Next} style={{ height: '50px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>Next</button>
 
   </div>
 )}
@@ -692,7 +762,7 @@ const App = () => {
     </div>
 
     <br />
-    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)'}}>Next</button>
+    <button onClick={handleSecondPageNext} style={{ width: '100%', height: '50px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)'}}>Next</button>
   </div>
 )}
 
@@ -704,7 +774,7 @@ const App = () => {
         <div>
 
 <div style={{ display: 'flex', justifyContent: 'flex-end',marginTop:'10px' }}>
-  <button onClick={handleSettingsButtonClick} style={{ display: 'flex', alignItems: 'center' }}>
+  <button onClick={handleSettingsButtonClick} style={{ display: 'flex', alignItems: 'center' , boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>
     <SettingsIcon style={{ marginRight: '5px' }} />Settings
   </button>
 </div>
@@ -732,7 +802,10 @@ const App = () => {
   <div style={{ margin: '20px' }}>
   <span style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: 'large', marginBottom:'5px' }}>
   Total Bill: ₱ {calculations.reduce((total, calc) => total + (calc.difference * rate), 0).toFixed(2)}
-  <InfoIcon style={{ marginLeft: '5px' , color: 'gray' , fontSize:'medium  '}} />
+  <SellIcon style={{ marginLeft: '5px' , color: 'gray' , fontSize:'medium  '}} />
+  <button onClick={handleSave} style={{ marginLeft: '10px', border: 'none', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}>
+  Save
+</button>
 </span>
 
   <span style={{fontSize: 'medium', fontWeight:'bold'}}><span style={{fontWeight:'normal'}}>Last Entry:</span> {previousReading}</span>
@@ -781,16 +854,19 @@ const App = () => {
   <button
     id="add-reading-button"
     onClick={handleAddReading}
-    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', marginRight:'10px' }}
+    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', marginRight:'10px' , boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)' }}
   >
     <AddIcon /> Add
   </button>
 </div>
 
 
+
 <div style={{ borderTop: '1px solid gray', margin: '10px' , marginTop:'20px' , marginBottom:'20px' }}></div>
          
-            <button id="show-history-button" onClick={handleShowHistory}>Show History</button>
+            <button id="show-history-button" 
+            style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.03)'}}
+            onClick={handleShowHistory}>Show History</button>
             <Drawer
   anchor="bottom"
   open={showHistory}
@@ -802,9 +878,16 @@ const App = () => {
     },
   }}
 >
+
+
+  
   <Box sx={{ width: '100%', maxHeight: '50vh', display: 'flex', flexDirection: 'column' }} role="presentation">
     <div style={{ padding: '16px', borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
-      <h2 style={{ margin: 0 }}>History</h2>
+    <h3 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+        <ListItemIcon style={{ marginRight: '-10px',marginLeft:'-15px' , display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             <HistoryIcon />
+          </ListItemIcon>
+        History</h3>
     </div>
     <div style={{ flex: 1, overflowY: 'auto' }}>
       <List style={{ width: '100%' }}>
@@ -837,10 +920,60 @@ const App = () => {
 </Drawer>
 
 
+
+
+
+            <Drawer
+  anchor="bottom"
+  open={showMonthlyData}
+  onClose={handleHideMonthlyData}
+  style={{ display: 'flex', justifyContent: 'flex-end' }}
+  PaperProps={{
+    style: {
+      borderRadius: '15px 15px 0 0', // Set border radius for top left and right corners
+    },
+  }}
+>
+
+
+  <Box sx={{ width: '100%', maxHeight: '50vh', display: 'flex', flexDirection: 'column' }} role="presentation">
+    <div style={{ padding: '16px', borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
+    <h3 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+        <ListItemIcon style={{ marginRight: '-10px' , marginLeft:'-15px' , display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             <EventNoteIcon />
+          </ListItemIcon>
+        Monthly Tracker</h3>
+    </div>
+    <div style={{ flex: 1, overflowY: 'auto' }}>
+    <List style={{ width: '100%' }}>
+      {/* Add the saved data display */}
+      {savedData.map((data, index) => (
+        <div key={index} style={{ margin: '20px' }}>
+          <ListItemText
+            primary={
+              <>
+                <div style={{ fontWeight: 'bold' }}>{data.monthYear}</div>
+                <div>Total Bill: {data.totalBill}</div>
+              </>
+            }
+            secondary={data.dateSaved}
+          />
         </div>
+      ))}
+    </List>
+  </div>
+  </Box>
+</Drawer>
+
+
+
+        </div>
+
+
+
       )}
 
-
+    
 
 {showErrorMessage && (
   <Snackbar
@@ -924,7 +1057,7 @@ const App = () => {
         >
 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(46, 125, 50, 0.8)' , borderRadius:'5px' , padding:'15px' }}>
       <CheckCircleIcon style={{ fontSize: '50px', color: 'white' }} />
-      <span style={{ color: 'white', marginTop: '10px' }}>New Entry added!</span>
+      <span style={{ color: 'white', marginTop: '10px' }}>New entry added!</span>
     </div>
     </animated.div>
   </Snackbar>
