@@ -1085,11 +1085,11 @@ const canvasRef = useRef(null);
             transform: 'translate(-50%, -50%)',
             ...shakeProps,
           }}
-          className="shake-snackbar"
+          className="snackbar animated-explode-fade-out"
         >
 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(46, 125, 50, 0.8)' , borderRadius:'5px' , padding:'15px' }}>
       <CheckCircleIcon style={{ fontSize: '50px', color: 'white' }} />
-      <span style={{ color: 'white', marginTop: '10px' }}>New entry added!</span>
+    <span style={{ color: 'white', marginTop: '10px' }}>New entry added!</span>
     </div>
     </animated.div>
   </Snackbar>
